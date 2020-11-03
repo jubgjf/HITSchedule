@@ -3,11 +3,12 @@ package com.example.hitschedule.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 import com.example.hitschedule.R;
 import com.example.hitschedule.ui.MainActivity;
-import com.example.hitschedule.view.WeekView;
 import com.zhuangfei.timetable.model.Schedule;
 
 import java.util.ArrayList;
@@ -19,11 +20,51 @@ import java.util.List;
  */
 public class PreviewWidget extends AppWidgetProvider {
 
+    /**
+     * refresh_button被点击的事件
+     */
+    private static final String REFRESH_BUTTON_CLICKED = "RefreshButtonClick";
+
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
+
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_preview);
+        ComponentName watchWidget = new ComponentName(context, PreviewWidget.class);
+
+        remoteViews.setOnClickPendingIntent(R.id.refresh_button, getPendingSelfIntent(context));
+        appWidgetManager.updateAppWidget(watchWidget, remoteViews);
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        if (REFRESH_BUTTON_CLICKED.equals(intent.getAction())) {
+            // TODO 手动更新widget
+//            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+//
+//            RemoteViews remoteViews;
+//            ComponentName watchWidget;
+//
+//            remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_preview);
+//            watchWidget = new ComponentName(context, PreviewWidget.class);
+//
+//            remoteViews.setTextViewText(R.id.refresh_button, "TESTING");
+//
+//            appWidgetManager.updateAppWidget(watchWidget, remoteViews);
+        }
+    }
+
+    /**
+     * 获取点击refresh_button的PendingIntent
+     */
+    private PendingIntent getPendingSelfIntent(Context context) {
+        Intent intent = new Intent(context, getClass());
+        intent.setAction(PreviewWidget.REFRESH_BUTTON_CLICKED);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     /**
@@ -34,7 +75,7 @@ public class PreviewWidget extends AppWidgetProvider {
 
         for (Schedule course : getTodayCourses()) {
             RemoteViews elementViews = new RemoteViews(context.getPackageName(), R.layout.widget_preview_element);
-            elementViews.setTextViewText(R.id.appwidget_textview, course.getName());
+            elementViews.setTextViewText(R.id.course_textview, course.getName());
             containerViews.addView(R.id.widget_container, elementViews);
         }
 
