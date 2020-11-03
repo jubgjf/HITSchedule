@@ -79,6 +79,8 @@ import static com.example.hitschedule.util.Constant.CAPTCHA_ERROR;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener{
 
+    private static MainActivity instance;
+
     private String TAG = getClass().getName();
 
     private Toolbar toolbar;
@@ -127,6 +129,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         type = getIntent().getStringExtra("type");
         Bmob.initialize(this, "d2ad693a0277f5fc81c6dc84a91ca08f");
         checkForUpdate();
+        instance = this;
     }
 
     @Override
@@ -1133,4 +1136,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     public void setCWeek(int week){
         cWeek = week;
     }
+
+    public static MainActivity getInstance() {  return instance; }
+
+    public int getcWeek() { return cWeek; }
+
+    public WeekView getmWeekView() { return mWeekView; }
 }

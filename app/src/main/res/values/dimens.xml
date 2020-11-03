@@ -22,4 +22,7 @@
     <!--以下为刷新时验证码的布局的定义-->
     <dimen name="dialog_height">180dp</dimen>
     <dimen name="dialog_width">280dp</dimen>
+
+    <!--桌面小组件的布局-->
+    <dimen name="widget_margin">8dp</dimen>
 </resources>
