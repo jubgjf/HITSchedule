@@ -14,6 +14,7 @@ import com.zhuangfei.timetable.model.Schedule;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 桌面小组件，快速显示本日课程
@@ -58,11 +59,14 @@ public class PreviewWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        if (REFRESH_BUTTON_CLICKED.equals(intent.getAction())) {    // 手动更新widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            for (int appWidgetId : widgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId);
-            }
+        switch (Objects.requireNonNull(intent.getAction())) {
+            case REFRESH_BUTTON_CLICKED:    // 手动更新widget
+                // TODO 修复刷新无效
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                for (int appWidgetId : widgetIds) {
+                    updateAppWidget(context, appWidgetManager, appWidgetId);
+                }
+                break;
         }
     }
 
@@ -81,6 +85,11 @@ public class PreviewWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
         // TODO 清空旧内容
         RemoteViews containerViews = new RemoteViews(context.getPackageName(), R.layout.widget_preview);
+
+        // 教学周 + 星期几
+        String courseWeek = "第" + getcWeekString() + "周";
+        String dayOfWeek = "星期" + getDayOfWeek();
+        containerViews.setTextViewText(R.id.week_textview, courseWeek + " " + dayOfWeek);
 
         for (Schedule course : getTodayCourses()) {
             RemoteViews elementViews = new RemoteViews(context.getPackageName(), R.layout.widget_preview_element);
@@ -128,5 +137,13 @@ public class PreviewWidget extends AppWidgetProvider {
         } else {
             return dayOfWeek - 1;
         }
+    }
+
+    /**
+     * 获取本周是第几教学周
+     */
+    private static String getcWeekString() {
+        MainActivity mainActivity = MainActivity.getInstance();
+        return Integer.toString(mainActivity.getcWeek());
     }
 }
