@@ -1,15 +1,27 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/widget_margin">
-
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/widget_margin">
+    <TextView
+            android:id="@+id/course_time_textview"
+            android:layout_gravity="fill"
+            android:minWidth="40dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:text="10:00-11:45"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:layout_margin="8dp"
+            tools:ignore="RtlCompat"/>
     <TextView
             android:id="@+id/course_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:textSize="24sp"
-            android:textStyle="bold|italic"
+            android:layout_gravity="fill"
+            android:textSize="14sp"
+            android:text="test"
             android:layout_margin="8dp"/>
-</RelativeLayout>
+</GridLayout>
